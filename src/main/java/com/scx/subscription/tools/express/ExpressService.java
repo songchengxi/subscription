@@ -1,8 +1,8 @@
 package com.scx.subscription.tools.express;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.scx.util.HttpRequest;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +34,11 @@ public class ExpressService {
         params.put("no",textFormat[1]);
         String json = HttpRequest.net(url, params, "GET");
 
-        int resultcode = JSONObject.fromObject(json).getInt("resultcode");
+        int resultcode = JSONObject.parseObject(json).getIntValue("resultcode");
         StringBuffer buffer = new StringBuffer();
         // 查询成功
         if (resultcode == 200) {
-            JSONArray list = JSONObject.fromObject(json).getJSONObject("result").getJSONArray("list");
+            JSONArray list = JSONObject.parseObject(json).getJSONObject("result").getJSONArray("list");
             for (int i = 0; i < list.size(); i++) {
                 JSONObject obj = (JSONObject) list.get(i);
                 buffer.append(obj.get("datetime")).append(obj.get("remark")).append(obj.get("zone")).append("\n\n");
@@ -47,7 +47,7 @@ public class ExpressService {
             buffer = new StringBuffer(buffer.substring(0, buffer.lastIndexOf("\n\n")));
             // 查询失败
         } else if (resultcode == 204) {
-            int error_code = JSONObject.fromObject(json).getInt("error_code");
+            int error_code = JSONObject.parseObject(json).getIntValue("error_code");
             if (error_code == 204304 || error_code == 204302) {
                 buffer.append("请填写正确的运单号");
             } else if (error_code == 204301) {
@@ -104,7 +104,7 @@ public class ExpressService {
     }
 
     public static void main(String[] args) {
-        String s = makeMessage("百世70924954199997");
+        String s = makeMessage("顺丰70924954199997");
         System.out.println(s);
     }
 }

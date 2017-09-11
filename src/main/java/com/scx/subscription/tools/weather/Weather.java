@@ -1,8 +1,8 @@
 package com.scx.subscription.tools.weather;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.scx.util.HttpRequest;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author scx
  * @date 2017/4/19
- * @desc 百度天气
+ * @desc 百度天气   总请求数: 0.5万次/天
  */
 public class Weather {
 
@@ -28,7 +28,7 @@ public class Weather {
         params.put("output", "json");
         params.put("ak", AK);
         String json = HttpRequest.net(url, params, "GET");
-        JSONObject jsonObject = JSONObject.fromObject(json);
+        JSONObject jsonObject = JSONObject.parseObject(json);
         String error = jsonObject.getString("error");
         StringBuilder result = new StringBuilder();
         if ("0".equals(error)) {

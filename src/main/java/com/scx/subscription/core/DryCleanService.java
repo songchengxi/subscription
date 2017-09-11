@@ -1,40 +1,45 @@
-package com.scx.subscription.core.service;
+package com.scx.subscription.core;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.scx.subscription.tools.face.FaceService;
+import com.scx.subscription.message.resp.NewsMessage;
+import com.scx.subscription.message.resp.TextMessage;
+import com.scx.subscription.message.resp.entity.Article;
+import com.scx.subscription.service.UserService;
 import com.scx.subscription.tools.express.ExpressService;
+import com.scx.subscription.tools.face.FaceService;
 import com.scx.subscription.tools.today.TodayInHistory;
 import com.scx.subscription.tools.translate.service.TranslateService;
 import com.scx.subscription.tools.tuling.TulingService;
 import com.scx.subscription.tools.weather.Weather;
 import com.scx.util.DanXianSheng;
 import com.scx.util.MessageUtil;
-import com.scx.subscription.message.resp.NewsMessage;
-import com.scx.subscription.message.resp.TextMessage;
-import com.scx.subscription.message.resp.entity.Article;
+import com.scx.util.SpringPropertiesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 核心服务类
- *
- * @author 宋程玺
- * @date 2015-08-09
  */
-public class CoreService {
+@Component
+public class DryCleanService {
 
-    private static Logger logger = LoggerFactory.getLogger(CoreService.class);
+    private static Logger log = LoggerFactory.getLogger(DryCleanService.class);
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 处理微信发来都请求
      */
-    public static String processRequest(HttpServletRequest request) {
+    public String processRequest(HttpServletRequest request) {
         String respMessage = null;
 
         try {
@@ -44,19 +49,20 @@ public class CoreService {
             Map<String, String> requestMap = MessageUtil.parseXml(request);
             // 发送方账号（open_id）
             String fromUserName = requestMap.get("FromUserName");
-            logger.info("fromUserName:" + fromUserName);
+            log.info("fromUserName:" + fromUserName);
             // 公众账号
             String toUserName = requestMap.get("ToUserName");
-            logger.info("toUserName:" + toUserName);
+            log.info("toUserName:" + toUserName);
             // 消息创建时间 （整型）
             String createTime = requestMap.get("CreateTime");
-            logger.info(DanXianSheng.formatTime(createTime));
+            log.info(DanXianSheng.formatTime(createTime));
+
             // 文本消息内容
             String content = requestMap.get("Content");
-            logger.info("content:" + content);
+            log.info("content:" + content);
             // 消息类型
             String msgType = requestMap.get("MsgType");
-            logger.info("msgType:" + msgType);
+            log.info("msgType:" + msgType);
 
             // 回复文本消息
             TextMessage textMessage = new TextMessage();
@@ -228,17 +234,25 @@ public class CoreService {
             } else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
                 // 事件类型
                 String eventType = requestMap.get("Event");
-                logger.info("eventType:{}", eventType);
+                log.info("eventType:{}", eventType);
+                //事件KEY值，qrscene_为前缀，后面为二维码的参数值
+                String eventKey = requestMap.get("EventKey");
+                log.info("EventKey:{}", eventKey);
+                //二维码的ticket
+                String ticket = requestMap.get("Ticket");
+                log.info("Ticket:{}", ticket);
+
                 // 订阅
                 if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
                     respContent = DanXianSheng.getMainMenu();
+                    textMessage.setContent(respContent);
+                    respMessage = MessageUtil.textMessageToXml(textMessage);
+                    userService.saveUserInfo(fromUserName);
                     // 取消订阅（用户取消订阅收不到公众号发送的消息，不需要回复）
                 } else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
-
+                    userService.updateUserInfo(fromUserName);
                     // 自定义菜单点击事件
                 } else if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {
-                    String eventKey = requestMap.get("EventKey");
-                    logger.info("eventKey:{}", eventKey);
                     //历史上的今天
                     if (eventKey.equals("22")) {
                         respContent = TodayInHistory.getTodayInHistoryInfo();
@@ -269,7 +283,7 @@ public class CoreService {
                 }
             }
         } catch (Exception e) {
-            logger.error("异常:{}", e.getMessage());
+            log.error("异常:{}", e.getMessage());
             e.printStackTrace();
         }
         return respMessage;

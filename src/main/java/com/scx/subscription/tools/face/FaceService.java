@@ -2,9 +2,9 @@ package com.scx.subscription.tools.face;
 
 import java.util.*;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.scx.util.HttpRequest;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public class FaceService {
         // 调用人脸检测接口
         String json = HttpRequest.net(queryUrl, params, "GET");
         // 解析返回json中的Face列表
-        JSONArray jsonArray = JSONObject.fromObject(json).getJSONArray("face");
+        JSONArray jsonArray = JSONObject.parseObject(json).getJSONArray("face");
         // 遍历检测到的人脸
         for (int i = 0; i < jsonArray.size(); i++) {
             // Face
@@ -52,8 +52,8 @@ public class FaceService {
 
             Face face = new Face();
             face.setFaceId(faceObject.getString("face_id"));
-            face.setAgeValue(attrObject.getJSONObject("age").getInt("value"));
-            face.setAgeRange(attrObject.getJSONObject("age").getInt("range"));
+            face.setAgeValue(attrObject.getJSONObject("age").getIntValue("value"));
+            face.setAgeRange(attrObject.getJSONObject("age").getIntValue("range"));
             face.setGenderValue(genderConvert(attrObject.getJSONObject("gender").getString("value")));
             face.setGenderConfidence(attrObject.getJSONObject("gender").getDouble("confidence"));
             face.setRaceValue(raceConvert(attrObject.getJSONObject("race").getString("value")));

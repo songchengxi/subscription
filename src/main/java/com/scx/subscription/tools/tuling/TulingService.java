@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.scx.util.HttpRequest;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.scx.subscription.tools.tuling.pojo.Flight;
 import com.scx.subscription.tools.tuling.pojo.Menu;
 import com.scx.subscription.tools.tuling.pojo.News;
@@ -46,14 +44,14 @@ public class TulingService {
         params.put("info", input);
         String json = HttpRequest.net(requestUrl, params, "GET");
         // 获得状态码
-        int code = (Integer) JSONObject.fromObject(json).get("code");
+        int code = (Integer) JSONObject.parseObject(json).get("code");
         // 文本类数据
         if (code == 100000) {
-            info.append(JSONObject.fromObject(json).get("text"));
+            info.append(JSONObject.parseObject(json).get("text"));
             // 网址类数据
         } else if (code == 200000) {
-            String text = (String) JSONObject.fromObject(json).get("text");
-            String url = (String) JSONObject.fromObject(json).get("url");
+            String text = (String) JSONObject.parseObject(json).get("text");
+            String url = (String) JSONObject.parseObject(json).get("url");
             info.append("<a href=\"").append(url).append("\">").append(text).append("</a>");
             // 错误提示
         } else if (code == 40002) {
@@ -84,7 +82,7 @@ public class TulingService {
     private static Object getList(int code, String json) {
 
         List ortherList = new ArrayList();
-        JSONArray list = JSONObject.fromObject(json).getJSONArray("list");
+        JSONArray list = JSONObject.parseObject(json).getJSONArray("list");
         // 新闻
         if (code == 302000) {
             if (list.size() >= 10) {

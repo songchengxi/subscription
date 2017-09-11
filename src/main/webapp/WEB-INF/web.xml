@@ -20,26 +20,6 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <servlet>
-        <servlet-name>init</servlet-name>
-        <servlet-class>com.scx.subscription.core.servlet.InitServlet</servlet-class>
-        <init-param>
-            <param-name>appid</param-name>
-            <!--蛋鲜生-->
-            <!--<param-value>wx409ab16ce4d77d9e</param-value>-->
-            <!--测试号-->
-            <param-value>wxb3248a3e1c165a02</param-value>
-        </init-param>
-        <init-param>
-            <param-name>appsecret</param-name>
-            <!--蛋鲜生-->
-            <!--<param-value>eacc29a885a5f3eee09108eb88b66dc2</param-value>-->
-            <!--测试号-->
-            <param-value>51b599fafd1e0a381b3b2ae2c9339660</param-value>
-        </init-param>
-        <load-on-startup>0</load-on-startup>
-    </servlet>
-
     <!-- springMVC的配置 -->
     <servlet>
         <servlet-name>springMVC</servlet-name>

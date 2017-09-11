@@ -1,5 +1,9 @@
 package com.scx.subscription.menu;
 
+import com.alibaba.fastjson.JSONObject;
+import com.scx.subscription.model.AccessToken;
+import com.scx.subscription.timetask.TokenTimeTask;
+import com.scx.util.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,8 +12,6 @@ import com.scx.subscription.menu.pojo.CommonButton;
 import com.scx.subscription.menu.pojo.ComplexButton;
 import com.scx.subscription.menu.pojo.Menu;
 import com.scx.subscription.menu.pojo.ViewButton;
-import com.scx.subscription.token.AccessToken;
-import com.scx.subscription.token.WechatUtil;
 
 /**
  * 菜单管理器类
@@ -21,22 +23,24 @@ public class MenuManager {
 
     private static Logger log = LoggerFactory.getLogger(MenuManager.class);
 
+    // 菜单创建（POST） 限100（次/天）
+    public static String menu_create_url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
+
     public static void main(String[] args) {
-        // 第三方用户唯一凭证
-        String appId = "wxb3248a3e1c165a02";// 测试号
-        // 第三方用户唯一凭证密钥
-        String appSecret = "51b599fafd1e0a381b3b2ae2c9339660";// 测试号
+        // 测试号
+        String appId = "wxb3248a3e1c165a02";
+        String appSecret = "51b599fafd1e0a381b3b2ae2c9339660";
 
         // 蛋鲜生
 //         String appId="wx409ab16ce4d77d9e";
 //         String appSecret="eacc29a885a5f3eee09108eb88b66dc2";
 
         // 调用接口获取access_token
-        AccessToken at = WechatUtil.getAccessToken(appId, appSecret);
+        AccessToken at = new TokenTimeTask().getToken();
 
         if (null != at) {
             // 调用接口创建菜单
-            int result = WechatUtil.createMenu(getMenu(), at.getToken());
+            int result = createMenu(getMenu(), at.getToken());
             // 判断菜单创建结果
             if (0 == result) {
                 log.info("菜单创建成功！");
@@ -44,6 +48,31 @@ public class MenuManager {
                 log.info("菜单创建失败，错误码：" + result);
             }
         }
+    }
+
+    /**
+     * 创建菜单
+     *
+     * @param menu        菜单实例
+     * @param accessToken 有效的access_token
+     * @return 0表示成功，其他值表示失败
+     */
+    public static int createMenu(Menu menu, String accessToken) {
+        int result = 0;
+        //拼装创建菜单的url
+        String url = menu_create_url.replace("ACCESS_TOKEN", accessToken);
+        //将菜单对象转换成json字符串
+        String jsonMenu = JSONObject.toJSONString(menu);
+        //调用接口创建菜单
+        JSONObject jsonObject = HttpRequest.httpsRequest(url, "POST", jsonMenu);
+
+        if (null != jsonObject) {
+            if (0 != jsonObject.getIntValue("errcode")) {
+                result = jsonObject.getIntValue("errcode");
+                log.error("创建菜单失败 errcode:{} errmsg:{}", jsonObject.getIntValue("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+        return result;
     }
 
     /**

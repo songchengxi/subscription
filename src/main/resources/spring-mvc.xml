@@ -19,7 +19,7 @@
     </context:component-scan>
 
     <!-- 定时任务配置 scheduler 方式 注解 暂时不支持动态更新 -->
-    <!--<context:component-scan base-package="com.scx.applet.timetask"/>-->
+    <context:component-scan base-package="com.scx.subscription.timetask"/>
     <task:executor id="executor" pool-size="5" />
     <task:scheduler id="scheduler" pool-size="10" />
     <!--<task:annotation-driven/>-->

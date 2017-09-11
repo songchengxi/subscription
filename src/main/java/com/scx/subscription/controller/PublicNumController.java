@@ -1,9 +1,10 @@
 package com.scx.subscription.controller;
 
-import com.scx.subscription.core.service.CoreService;
+import com.scx.subscription.core.CoreService;
 import com.scx.util.SignUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,9 @@ import java.io.UnsupportedEncodingException;
 public class PublicNumController {
 
     private static final Logger log = LoggerFactory.getLogger(PublicNumController.class);
+
+    @Autowired
+    private CoreService coreService;
 
     /**
      * 确认请求来自微信服务器
@@ -59,7 +63,7 @@ public class PublicNumController {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         // 调用核心业务类接收消息，处理消息
-        String respMessage = CoreService.processRequest(request);
+        String respMessage = coreService.processRequest(request);
         log.info("respMessage:{}", respMessage);
         // 响应消息
         return respMessage;

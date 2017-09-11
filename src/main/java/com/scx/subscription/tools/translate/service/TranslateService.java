@@ -1,9 +1,9 @@
 package com.scx.subscription.tools.translate.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.scx.subscription.tools.translate.entity.TranslateResult;
 import com.scx.util.HttpRequest;
 import com.scx.util.MD5;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
@@ -50,8 +50,8 @@ public class TranslateService {
         // 查询并获取返回结果
         String json = HttpRequest.net(requestUrl, params, "GET");
         // 将json转换成TranslateResult对象
-        JSONObject object = JSONObject.fromObject(json);
-        TranslateResult translateResult = (TranslateResult) JSONObject.toBean(object, TranslateResult.class);
+        JSONObject object = JSONObject.parseObject(json);
+        TranslateResult translateResult = JSONObject.toJavaObject(object, TranslateResult.class);
         // 取出translateResult中的译文
         dst = translateResult.getTrans_result().get(0).getDst();
 
@@ -77,8 +77,8 @@ public class TranslateService {
 
         try {
             result = HttpRequest.net(url, params, "GET");
-            JSONObject object = JSONObject.fromObject(result);
-            if (object.getInt("errorCode") == 0) {
+            JSONObject object = JSONObject.parseObject(result);
+            if (object.getIntValue("errorCode") == 0) {
                 result = object.getString("translation");
             } else {
                 log.warn("有道翻译，errorCode：",object.getString("errorCode"));
@@ -92,5 +92,7 @@ public class TranslateService {
     public static void main(String[] args) throws Exception {
         System.out.println(youdaoTranslate("Hello world!"));
         System.out.println(youdaoTranslate("你好世界！"));
+//        System.out.println(baiduTranslate("Hello world!"));
+//        System.out.println(baiduTranslate("你好世界！"));
     }
 }
