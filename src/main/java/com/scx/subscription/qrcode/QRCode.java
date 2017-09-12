@@ -8,12 +8,14 @@ import com.scx.util.HttpReqUtil;
 import com.scx.util.SpringPropertiesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+@Component
 public class QRCode {
 
     private static final Logger log = LoggerFactory.getLogger(QRCode.class);
@@ -21,43 +23,15 @@ public class QRCode {
     private static String CREATE_TICKET_PATH;
     private static String SHOW_QRCODE_PATH;
     private static String SHORT_URL;
-    private static String APPID;
-    private static String APPSECRET;
 
     static {
         try {
             CREATE_TICKET_PATH = new SpringPropertiesUtil().getProperty("config", "CREATE_TICKET_PATH");
             SHOW_QRCODE_PATH = new SpringPropertiesUtil().getProperty("config", "SHOW_QRCODE_PATH");
             SHORT_URL = new SpringPropertiesUtil().getProperty("config", "SHORT_URL");
-            APPID = new SpringPropertiesUtil().getProperty("config", "APPID");
-            APPSECRET = new SpringPropertiesUtil().getProperty("config", "APPSECRET");
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        QRCode qrCode = new QRCode();
-
-        //测试
-        String APPID = "wxb3248a3e1c165a02";
-        String APPSECRET = "51b599fafd1e0a381b3b2ae2c9339660";
-        // 调用接口获取access_token
-//        AccessToken at = WechatUtil.getAccessToken(APPID, APPSECRET);
-        String token = "zuxDjube2wtoyXa0zaJwgBui3lxNEzsaDFGaSitDApI9NihGnjnKxYc6OsF-9iFNVSGOWargs2VGlll7h3pQZnQlSUaF8xGFKuxdV5VCK50REOhAEAHUE";
-//        String tempTicket = qrCode.createTempTicket(at.getToken(), "10800", 101);//临时数字{"ticket":"gQH18DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAybE45bW82V1RkUjQxTHJEUE5wMVoAAgSrvbNZAwQwKgAA","expire_seconds":10800,"url":"http:\/\/weixin.qq.com\/q\/02lN9mo6WTdR41LrDPNp1Z"}
-//        String tempTicket = qrCode.createTempStrTicket(at.getToken(), "10800", "sssssssss");//临时字符串{"ticket":"gQFN8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyY05HTm9RV1RkUjQxemtvUU5wY1IAAgSk7rNZAwQwKgAA","expire_seconds":10800,"url":"http:\/\/weixin.qq.com\/q\/02cNGNoQWTdR41zkoQNpcR"}
-//        String aaa = qrCode.showQrcode("gQH18DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAybE45bW82V1RkUjQxTHJEUE5wMVoAAgSrvbNZAwQwKgAA");
-//        WechatResult ppp = qrCode.showQrcode("gQFN8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyY05HTm9RV1RkUjQxemtvUU5wY1IAAgSk7rNZAwQwKgAA", "d:\\111.jpg");
-//        System.out.println(ppp);
-//        String foreverTicket = qrCode.createForeverTicket(at.getToken(), 11111);//永久数字{"ticket":"gQEB8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyeWxUN296V1RkUjQxMDAwME0wM1oAAgRC8bNZAwQAAAAA","url":"http:\/\/weixin.qq.com\/q\/02ylT7ozWTdR410000M03Z"}
-//        System.out.println(foreverTicket);
-//        WechatResult forever = qrCode.showQrcode("gQEB8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyeWxUN296V1RkUjQxMDAwME0wM1oAAgRC8bNZAwQAAAAA", "d:\\forever.jpg");
-//        System.out.println(forever);
-//        String foreverStrTicket = qrCode.createForeverStrTicket(at.getToken(), "123");//永久字符串{"ticket":"gQEn8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyQnRLZW9HV1RkUjQxMDAwME0wNzQAAgR197NZAwQAAAAA","url":"http:\/\/weixin.qq.com\/q\/02BtKeoGWTdR410000M074"}
-        String sort = qrCode.shortQRCodeurl(token, "gQEn8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyQnRLZW9HV1RkUjQxMDAwME0wNzQAAgR197NZAwQAAAAA");
-        System.out.println(sort);
-
     }
 
     /**
@@ -170,7 +144,7 @@ public class QRCode {
      * @param savePath 保存的路径,例如 F:\\phil\phil.jpg
      * @return Result.success = true 表示下载图片下载成功
      */
-    public WechatResult showQrcode(String ticket, String savePath) throws Exception {
+    public WechatResult downQrcode(String ticket, String savePath) throws Exception {
         return HttpReqUtil.downMeaterMethod(params(ticket), HttpReqUtil.GET, SHOW_QRCODE_PATH, savePath);
     }
 

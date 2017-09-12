@@ -12,14 +12,12 @@ import com.scx.subscription.tools.tuling.TulingService;
 import com.scx.subscription.tools.weather.Weather;
 import com.scx.util.DanXianSheng;
 import com.scx.util.MessageUtil;
-import com.scx.util.SpringPropertiesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -247,7 +245,7 @@ public class DryCleanService {
                     respContent = DanXianSheng.getMainMenu();
                     textMessage.setContent(respContent);
                     respMessage = MessageUtil.textMessageToXml(textMessage);
-                    userService.saveUserInfo(fromUserName);
+                    userService.saveUserInfo(fromUserName, eventKey);
                     // 取消订阅（用户取消订阅收不到公众号发送的消息，不需要回复）
                 } else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
                     userService.updateUserInfo(fromUserName);

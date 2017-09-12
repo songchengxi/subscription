@@ -30,6 +30,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.net.ftp.FtpClient;
 
 /**
  * Http连接工具类
@@ -296,36 +297,44 @@ public class HttpReqUtil {
      */
     private static WechatResult inputStreamToMedia(InputStream inputStream, String savePath, String type) {
         WechatResult result = new WechatResult();
-        FileOutputStream output = null;
+        FtpUtil ftpUtil = null;
+//        FileOutputStream output = null;
         try {
-            File file;
-            file = new File(savePath);
-            String paramPath = file.getParent(); // 路径
-            String fileName = file.getName(); //
-            String newName = fileName.substring(0, fileName.lastIndexOf(".")) + "." + type;// 根据实际返回的文件类型后缀
-            savePath = paramPath + "\\" + newName;
-            if (!file.exists()) {
-                File dirFile = new File(paramPath);
-                dirFile.mkdirs();
-            }
-            file = new File(savePath);
-            output = new FileOutputStream(file);
-			int len;
-            byte[] array = new byte[1024];
-			while ((len = inputStream.read(array)) != -1) {
-				output.write(array, 0, len);
-			}
-            IOUtils.write(array, output);
-            output.flush();
-            result.setSuccess(true);
-            result.setObject("save success!");
+            ftpUtil = new FtpUtil("bxw2442340070.my3w.com", 21, "bxw2442340070", "qaz123456");
+            //建立连接
+            FtpClient ftpClient = ftpUtil.connectServer();
+            ftpClient.putFile(savePath + "." + type, inputStream);
+            log.info("文件上传成功:{}", savePath + "." + type);
+//            File file;
+//            file = new File(savePath);
+//            String paramPath = file.getParent(); // 路径
+//            String fileName = file.getName(); //
+//            String newName = fileName.substring(0, fileName.lastIndexOf(".")) + "." + type;// 根据实际返回的文件类型后缀
+//            savePath = paramPath + "\\" + newName;
+//            if (!file.exists()) {
+//                File dirFile = new File(paramPath);
+//                dirFile.mkdirs();
+//            }
+//            file = new File(savePath);
+//            output = new FileOutputStream(file);
+//			int len;
+//            byte[] array = new byte[1024];
+//			while ((len = inputStream.read(array)) != -1) {
+//				output.write(array, 0, len);
+//			}
+//            IOUtils.write(array, output);
+//            output.flush();
+//            result.setSuccess(true);
+//            result.setObject("save success!");
         } catch (Exception e) {
+            log.error("文件上传失败，文件：{}，错误：{}", savePath, e);
             e.printStackTrace();
             result.setSuccess(false);
             result.setObject(e.getMessage());
             result.setMsg(e.getMessage());
         } finally {
-            IOUtils.closeQuietly(output);
+            ftpUtil.closeServer();
+//            IOUtils.closeQuietly(output);
         }
         return result;
     }

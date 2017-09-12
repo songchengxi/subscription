@@ -3,6 +3,7 @@ package com.scx.subscription.service;
 import com.alibaba.fastjson.JSONObject;
 import com.scx.subscription.model.AccessToken;
 import com.scx.subscription.model.User;
+import com.scx.subscription.qrcode.QRCode;
 import com.scx.subscription.repository.AccessTokenRepository;
 import com.scx.subscription.repository.UserRepository;
 import com.scx.util.HttpReqUtil;
@@ -23,21 +24,22 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private QRCode qrCode;
+
     private static String GET_USER_INFO;
     private static String APPID;
-    private static String APPSECRET;
 
     static {
         try {
             GET_USER_INFO = new SpringPropertiesUtil().getProperty("config", "getUserInfo");
             APPID = new SpringPropertiesUtil().getProperty("config", "APPID");
-            APPSECRET = new SpringPropertiesUtil().getProperty("config", "APPSECRET");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void saveUserInfo(String fromUserName) {
+    public void saveUserInfo(String fromUserName, String eventKey) throws Exception {
         AccessToken ac = accessTokenRepository.findOne(APPID);
         Map<String, String> params = new HashMap<String, String>();
         params.put("access_token", ac.getToken());
@@ -46,9 +48,18 @@ public class UserService {
         String result = HttpReqUtil.HttpsDefaultExecute(HttpReqUtil.GET, GET_USER_INFO, params, null);
         JSONObject j = JSONObject.parseObject(result);
         if (j != null) {
-            User u = new User();
-            u.setSubscribe(j.getString("subscribe"));
-            u.setOpenid(j.getString("openid"));
+            User u = userRepository.findOne(fromUserName);
+            if (u == null) {
+                u = new User();
+                u.setOpenid(fromUserName);
+                u.setRecommend(eventKey.split("_")[1]);
+                int count = (int) userRepository.count() + 1;
+                u.setSceneId(String.valueOf(count));
+                String ticket = qrCode.createForeverTicket(ac.getToken(), count + 1);
+                u.setTicket(ticket);
+                qrCode.downQrcode(ticket, "/image/" + count);
+            }
+            u.setSubscribe("1");
             u.setNickname(j.getString("nickname"));
             u.setSex(j.getString("sex"));
             u.setLanguage(j.getString("language"));

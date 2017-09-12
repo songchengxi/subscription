@@ -27,26 +27,14 @@ public class MenuManager {
     public static String menu_create_url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
 
     public static void main(String[] args) {
-        // 测试号
-        String appId = "wxb3248a3e1c165a02";
-        String appSecret = "51b599fafd1e0a381b3b2ae2c9339660";
 
-        // 蛋鲜生
-//         String appId="wx409ab16ce4d77d9e";
-//         String appSecret="eacc29a885a5f3eee09108eb88b66dc2";
-
-        // 调用接口获取access_token
-        AccessToken at = new TokenTimeTask().getToken();
-
-        if (null != at) {
-            // 调用接口创建菜单
-            int result = createMenu(getMenu(), at.getToken());
-            // 判断菜单创建结果
-            if (0 == result) {
-                log.info("菜单创建成功！");
-            } else {
-                log.info("菜单创建失败，错误码：" + result);
-            }
+        // 调用接口创建菜单
+        int result = createMenu(getMenu(), "OkGDLkP4Mmlt0r3bbiBbtgb0E9hYoE1itQxen3nzlyHlpeEe8hFeialZlrSxsZNql5v_tOqwczX8eWvMpreNDgzw_lXYqrs_d9oVVbu8250ut5cEykGFQ8nBhwiOwUvoAUXhABADXA");
+        // 判断菜单创建结果
+        if (0 == result) {
+            log.info("菜单创建成功！");
+        } else {
+            log.info("菜单创建失败，错误码：" + result);
         }
     }
 
@@ -147,7 +135,12 @@ public class MenuManager {
         ViewButton btn34 = new ViewButton();
         btn34.setName("VIEW");
         btn34.setType("view");
-        btn34.setUrl("http://chengxi.duapp.com/wechat/index.html");
+        btn34.setUrl("http://songcx.duapp.com/subscription/page/dry-clean/index.html");
+
+        CommonButton btn35 = new CommonButton();
+        btn35.setName("推广二维码");
+        btn35.setType("click");
+        btn35.setKey("35");
 
         ComplexButton mainBtn1 = new ComplexButton();
         mainBtn1.setName("扫码拍照");
@@ -159,7 +152,7 @@ public class MenuManager {
 
         ComplexButton mainBtn3 = new ComplexButton();
         mainBtn3.setName("更多体验");
-        mainBtn3.setSub_button(new Button[]{btn31, btn32, btn33, btn34});
+        mainBtn3.setSub_button(new Button[]{btn31, btn32, btn33, btn34, btn35});
 
 		/*
          * 这是公众号目前的菜单结构，每个一级菜单都有二级菜单项<br>

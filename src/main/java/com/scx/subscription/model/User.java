@@ -17,6 +17,15 @@ public class User implements Serializable {
     @Column(name = "subscribe")
     public String subscribe;//值为0时，代表此用户没有关注该公众号
 
+    @Column(name = "scene_id")
+    public String sceneId;//二维码scene_id
+
+    @Column(name = "ticket")
+    public String ticket;//二维码的ticket
+
+    @Column(name = "recommend")
+    public String recommend;//推荐人
+
     @Column(name = "nickname")
     public String nickname;//昵称
 
@@ -52,6 +61,30 @@ public class User implements Serializable {
 
     @Column(name = "tagid_list")
     public String tagidList;//用户被打上的标签ID列表
+
+    public String getSceneId() {
+        return sceneId;
+    }
+
+    public void setSceneId(String sceneId) {
+        this.sceneId = sceneId;
+    }
+
+    public String getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(String ticket) {
+        this.ticket = ticket;
+    }
+
+    public String getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(String recommend) {
+        this.recommend = recommend;
+    }
 
     public String getSubscribe() {
         return subscribe;
@@ -168,8 +201,11 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "subscribe='" + subscribe + '\'' +
-                ", openid='" + openid + '\'' +
+                "openid='" + openid + '\'' +
+                ", subscribe='" + subscribe + '\'' +
+                ", sceneId='" + sceneId + '\'' +
+                ", ticket='" + ticket + '\'' +
+                ", recommend='" + recommend + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", sex='" + sex + '\'' +
                 ", language='" + language + '\'' +
