@@ -11,7 +11,7 @@ li{ list-style-type: none;}
 .am-slider-default .am-control-nav{ display: none;}
 .am-direction-nav{ display: none;}
 .am-slider-default{ margin: 0;}
-.search{display: block; width: 90%; height: 3.5rem; line-height: 3.5rem; text-indent: 1rem; position: absolute; left: 5%; top:18rem; background: url(../images/search.png) no-repeat; background-size:100% 100%;}
+.search{display: block; width: 90%; height: 3.5rem; line-height: 3.5rem; text-indent: 1rem; position: absolute; left: 5%; top:18rem; background: url(../img/search.png) no-repeat; background-size:100% 100%;}
 .nav{ overflow: hidden; background: #fafafa; padding: 1rem 0;}
 .nav li{ float: left; width: 25%; text-align: center;}
 .nav li a{ color: #666;}
@@ -20,7 +20,7 @@ li{ list-style-type: none;}
 .am-navbar-default .am-navbar-nav{ background: #fff;}
 .footer{border-top: 1px solid #ddd;}
 .footer a{ color: #999;}
-.footer li img{ width: 30px; height: 30px; margin-top: 0;}
+.footer li img{ width: 25px; height: 25px; margin-top: 0;}
 .h50{ height: 50px;}
 .title{ background: #fff;}
 .title .am-titlebar-title{color: #f60;}
@@ -100,7 +100,7 @@ li{ list-style-type: none;}
 .am-nav-tabs{ border: 0;}
 .am-nav-tabs>li>a:hover{ border: 0;}
 .am-nav-tabs>li.am-active>a, .am-nav-tabs>li.am-active>a:focus, .am-nav-tabs>li.am-active>a:hover{ border: 0; color: red; border-bottom: 1px solid red;}
-.member{ background: url(../images/top_bg.jpg) no-repeat; background-size: cover; height: 120px;}
+.member{ background: url(../img/top_bg.jpg) no-repeat; background-size: cover; height: 120px;}
 .member-pic{ float: left; margin: 20px 0 0 25px;}
 .member-infor{ float: left;  color: #fff; margin-left: 15px; margin-top: 50px;}
 .member-pic img{ width: 80px;}
@@ -345,7 +345,7 @@ li{ list-style-type: none;}
 .order-style .current{ border-bottom: 2px solid #ff5500; background: transparent;}
 .cate-search{width: 100%; border-bottom: 1px solid #ddd; padding: 15px 5%; position:fixed; top: 49px; background: #fff; z-index: 10;}
 .cate-input{ width: 100%;  height: 3rem; border-radius: 15px; border: 1px solid #eee; padding-left: 2rem;}
-.cate-btn{ border: 0; background: url(../images/search.png) no-repeat; background-size: contain; width: 2rem; height: 2rem; position: absolute;
+.cate-btn{ border: 0; background: url(../img/search.png) no-repeat; background-size: contain; width: 2rem; height: 2rem; position: absolute;
 right: 2.5rem; top:2rem;}
 .order-style li{ float: left; width: 20%; text-align: center;}
 .order-style li a{ color: #383838;}

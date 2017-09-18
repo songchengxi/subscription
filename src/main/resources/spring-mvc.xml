@@ -46,6 +46,26 @@
           p:prefix="/page/"
           p:suffix=".jsp"/>
 
+    <!-- 拦截器 -->
+    <mvc:interceptors>
+        <!--请求链接，拦截所有的请求-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean class="com.scx.subscription.interceptor.ParamsInterceptor" />
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean class="com.scx.subscription.interceptor.LoginInterceptor">
+                <property name="excludeUrls">
+                    <list>
+                        <value>login/index.do</value>
+                        <value>login/prompt.do</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <!--上传配置-->
     <!--<bean id="multipartResolver"-->
     <!--class="org.springframework.web.multipart.commons.CommonsMultipartResolver"-->

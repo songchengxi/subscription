@@ -1,9 +1,9 @@
 package com.scx.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sun.net.ftp.FtpClient;
 import sun.net.ftp.FtpDirEntry;
-import sun.net.ftp.FtpProtocolException;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class FtpUtil {
 
-    private final static Logger log = Logger.getLogger(FtpUtil.class);
+    private final static Logger log = LoggerFactory.getLogger(FtpUtil.class);
 
     private String ip = "";
 
@@ -61,10 +61,7 @@ public class FtpUtil {
                 ftpClient.changeDirectory(this.path);//path是ftp服务下主目录的子目录
             }
             log.info("已登录到\"" + ftpClient.getWorkingDirectory() + "\"目录");
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.error("登录失败", e);
-        } catch (FtpProtocolException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("登录失败", e);
         }
@@ -86,10 +83,7 @@ public class FtpUtil {
                 FtpDirEntry entry = entries.next();
                 list.add(entry.getName());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.error("获取文件失败", e);
-        } catch (FtpProtocolException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("获取文件失败", e);
         }
@@ -115,10 +109,7 @@ public class FtpUtil {
             while ((str = br.readLine()) != null) {
                 sb.append(str);
             }
-        } catch (FtpProtocolException e) {
-            e.printStackTrace();
-            log.error("获取文件失败", e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("获取文件失败", e);
         }

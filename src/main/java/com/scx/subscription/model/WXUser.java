@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "wx_user")
-public class User implements Serializable {
+public class WXUser implements Serializable {
 
     @Id
     @Column(name = "openid")
@@ -200,7 +200,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "WXUser{" +
                 "openid='" + openid + '\'' +
                 ", subscribe='" + subscribe + '\'' +
                 ", sceneId='" + sceneId + '\'' +

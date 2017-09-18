@@ -2,7 +2,7 @@ package com.scx.subscription.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.scx.subscription.model.AccessToken;
-import com.scx.subscription.model.User;
+import com.scx.subscription.model.WXUser;
 import com.scx.subscription.qrcode.QRCode;
 import com.scx.subscription.repository.AccessTokenRepository;
 import com.scx.subscription.repository.UserRepository;
@@ -48,14 +48,14 @@ public class UserService {
         String result = HttpReqUtil.HttpsDefaultExecute(HttpReqUtil.GET, GET_USER_INFO, params, null);
         JSONObject j = JSONObject.parseObject(result);
         if (j != null) {
-            User u = userRepository.findOne(fromUserName);
+            WXUser u = userRepository.findOne(fromUserName);
             if (u == null) {
-                u = new User();
+                u = new WXUser();
                 u.setOpenid(fromUserName);
                 u.setRecommend(eventKey.split("_")[1]);
                 int count = (int) userRepository.count() + 1;
                 u.setSceneId(String.valueOf(count));
-                String ticket = qrCode.createForeverTicket(ac.getToken(), count + 1);
+                String ticket = qrCode.createForeverTicket(ac.getToken(), count);
                 u.setTicket(ticket);
                 qrCode.downQrcode(ticket, "/image/" + count);
             }
@@ -77,7 +77,7 @@ public class UserService {
     }
 
     public void updateUserInfo(String fromUserName) {
-        User one = userRepository.findOne(fromUserName);
+        WXUser one = userRepository.findOne(fromUserName);
         one.setSubscribe("0");
         userRepository.save(one);
     }
