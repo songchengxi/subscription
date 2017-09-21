@@ -5,7 +5,7 @@ import com.scx.subscription.model.AccessToken;
 import com.scx.subscription.model.WXUser;
 import com.scx.subscription.qrcode.QRCode;
 import com.scx.subscription.repository.AccessTokenRepository;
-import com.scx.subscription.repository.UserRepository;
+import com.scx.subscription.repository.WXUserRepository;
 import com.scx.util.HttpReqUtil;
 import com.scx.util.SpringPropertiesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class UserService {
     private AccessTokenRepository accessTokenRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private WXUserRepository wxUserRepository;
 
     @Autowired
     private QRCode qrCode;
@@ -39,7 +39,8 @@ public class UserService {
         }
     }
 
-    public void saveUserInfo(String fromUserName, String eventKey) throws Exception {
+    public WXUser saveUserInfo(String fromUserName, String eventKey) throws Exception {
+        WXUser u = null;
         AccessToken ac = accessTokenRepository.findOne(APPID);
         Map<String, String> params = new HashMap<String, String>();
         params.put("access_token", ac.getToken());
@@ -48,12 +49,12 @@ public class UserService {
         String result = HttpReqUtil.HttpsDefaultExecute(HttpReqUtil.GET, GET_USER_INFO, params, null);
         JSONObject j = JSONObject.parseObject(result);
         if (j != null) {
-            WXUser u = userRepository.findOne(fromUserName);
+            u = wxUserRepository.findOne(fromUserName);
             if (u == null) {
                 u = new WXUser();
                 u.setOpenid(fromUserName);
                 u.setRecommend(eventKey.split("_")[1]);
-                int count = (int) userRepository.count() + 1;
+                int count = (int) wxUserRepository.count() + 1;
                 u.setSceneId(String.valueOf(count));
                 String ticket = qrCode.createForeverTicket(ac.getToken(), count);
                 u.setTicket(ticket);
@@ -72,13 +73,14 @@ public class UserService {
             u.setRemark(j.getString("remark"));
             u.setGroupid(j.getString("groupid"));
             u.setTagidList(j.getString("tagid_list"));
-            userRepository.save(u);
+            wxUserRepository.save(u);
         }
+        return u;
     }
 
     public void updateUserInfo(String fromUserName) {
-        WXUser one = userRepository.findOne(fromUserName);
+        WXUser one = wxUserRepository.findOne(fromUserName);
         one.setSubscribe("0");
-        userRepository.save(one);
+        wxUserRepository.save(one);
     }
 }

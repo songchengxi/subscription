@@ -1,20 +1,50 @@
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/includes/pageinclude.jsp" %>
+<%
+    String id = request.getParameter("id");
+%>
 <html>
 <head>
-    <meta charset="utf-8"/>
     <title>泰洁干洗</title>
     <meta name="description" content="泰洁干洗"/>
     <meta name="keywords" content="泰洁干洗"/>
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <%@ include file="/includes/headinclude.jsp" %>
     <link rel="stylesheet" href="css/amazeui.min.css"/>
     <link rel="stylesheet" href="css/style.css"/>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/amazeui.min.js"></script>
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        var app = angular.module('app', []);
+
+        app.controller('MainController',
+                function ($rootScope, $scope, $http) {
+
+                    $scope.data = {};
+                    $scope.rows = [];
+
+                    $scope.data.id = <%=id%>;
+
+                    //初始化载入数据
+                    $http({
+                        url: '${basePath}/goods/findById.do?id=' + $scope.data.id,
+                        method: 'POST'
+                    }).then(function (res) {
+                        $scope.data = res.data.goods;
+                    });
+
+                    $scope.index = function () {
+                        window.location.href = "${basePath}/page/dry-clean/index.jsp";
+                    };
+                });
+        /*]]>*/
+    </script>
 </head>
-<body>
+<body ng-app="app" ng-controller="MainController">
+<input type="hidden" id="openId" value="${openId}">
 <header data-am-widget="header" class="am-header am-header-default header">
-    <div class="am-header-left am-header-nav">
-        <a href="javascript:history.go(-1)">
+    <div class="am-header-left am-header-nav" style="top: 11px;">
+        <a href="javascript:void(0);" ng-click="index()">
             <i class="am-header-icon am-icon-angle-left"></i>
         </a>
     </div>
@@ -23,6 +53,7 @@
         <a href="#right-link" class=""> </a>
     </div>
 </header>
+
 <div data-am-widget="slider" class="am-slider am-slider-default" data-am-slider='{}'>
     <ul class="am-slides">
         <li><img src="img/detail.png"></li>
@@ -30,12 +61,12 @@
     </ul>
 </div>
 <div class="detail">
-    <h2>卤香滑鸡</h2>
+    <h2>{{data.name}}</h2>
     <div class="price">
-        <b>￥30</b><span>（积分可抵扣5元）</span>
+        <b>{{data.price}}积分</b><span></span>
     </div>
     <div class="kucun">
-        <p>库存：1000</p>
+        <p>库存：{{data.stock}}</p>
         <p>运费：免运费</p>
     </div>
 </div>
@@ -49,14 +80,7 @@
     </ul>
 </div>
 <div class="detail-con">
-    <p>  排毒排便－香蕉牛奶汁</p>
-    <p>  适量加入牛奶调理，可以补充更多钙质，对于正在减肥中的女孩来说，也比较有饱足感。经常失眠或是容易经痛的女孩也可以喝喝看！</p>
-    <br/>
-    <br/>
-    <p>  止咳防晕－芒果汁</p>
-    <p>  退火利尿－椰子汁</p>
-    <p>  不过有的人会怕椰子的味道，也因为椰子水生冷寒性，因此女孩们如果想喝椰子水来消暑，或是肠胃不好的人，在喝之前还是要三思！</p>
-    <p>  水果之王－奇异果汁</p>
+    <p>{{data.describe}}</p>
     <img src="img/banner.jpg"/>
 </div>
 <div class="h50"></div>

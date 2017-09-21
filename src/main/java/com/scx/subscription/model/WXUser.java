@@ -17,6 +17,9 @@ public class WXUser implements Serializable {
     @Column(name = "subscribe")
     public String subscribe;//值为0时，代表此用户没有关注该公众号
 
+    @Column(name = "score")
+    private String score;//积分
+
     @Column(name = "scene_id")
     public String sceneId;//二维码scene_id
 
@@ -61,6 +64,14 @@ public class WXUser implements Serializable {
 
     @Column(name = "tagid_list")
     public String tagidList;//用户被打上的标签ID列表
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
 
     public String getSceneId() {
         return sceneId;
@@ -203,6 +214,7 @@ public class WXUser implements Serializable {
         return "WXUser{" +
                 "openid='" + openid + '\'' +
                 ", subscribe='" + subscribe + '\'' +
+                ", score='" + score + '\'' +
                 ", sceneId='" + sceneId + '\'' +
                 ", ticket='" + ticket + '\'' +
                 ", recommend='" + recommend + '\'' +

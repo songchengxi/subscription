@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/includes/pageinclude.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,15 +8,33 @@
     <meta name="description" content="泰洁干洗"/>
     <meta name="keywords" content="泰洁干洗"/>
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <%@ include file="/includes/headinclude.jsp" %>
     <link rel="stylesheet" href="css/amazeui.min.css"/>
     <link rel="stylesheet" href="css/style.css"/>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/amazeui.min.js"></script>
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        var app = angular.module('app', []);
+
+        app.controller('MainController',
+                function ($rootScope, $scope, $http) {
+
+                    $scope.data = {};
+                    $scope.rows = [];
+
+                    $scope.member = function () {
+                        window.location.href = "${basePath}/page/dry-clean/member.jsp";
+                    }
+                });
+        /*]]>*/
+    </script>
 </head>
-<body>
+<body ng-app="app" ng-controller="MainController">
+<input type="hidden" id="openId" value="${openId}">
 <header data-am-widget="header" class="am-header am-header-default header">
     <div class="am-header-left am-header-nav">
-        <a href="javascript:history.go(-1)">
+        <a href="javascript:void(0);" ng-click="member()">
             <i class="am-header-icon am-icon-angle-left"></i>
         </a>
     </div>

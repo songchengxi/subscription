@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/includes/pageinclude.jsp" %>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -6,15 +7,33 @@
     <meta name="description" content="泰洁干洗"/>
     <meta name="keywords" content="泰洁干洗"/>
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <%@ include file="/includes/headinclude.jsp" %>
     <link rel="stylesheet" href="css/amazeui.min.css"/>
     <link rel="stylesheet" href="css/style.css"/>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/amazeui.min.js"></script>
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        var app = angular.module('app', []);
+
+        app.controller('MainController',
+                function ($rootScope, $scope, $http) {
+
+                    $scope.data = {};
+                    $scope.rows = [];
+
+                    $scope.member = function () {
+                        window.location.href = "${basePath}/page/dry-clean/member.jsp";
+                    }
+                });
+        /*]]>*/
+    </script>
 </head>
-<body>
+<body ng-app="app" ng-controller="MainController">
+<input type="hidden" id="openId" value="${openId}">
 <header data-am-widget="header" class="am-header am-header-default header">
-    <div class="am-header-left am-header-nav">
-        <a href="javascript:history.go(-1)">
+    <div class="am-header-left am-header-nav" style="top: 11px;">
+        <a href="javascript:void(0);" ng-click="member()">
             <i class="am-header-icon am-icon-angle-left"></i>
         </a>
     </div>
@@ -40,7 +59,7 @@
 </div>
 <div class="c-comment-list" style="border: 0;">
     <a class="o-con" href="">
-        <div class="o-con-img"><img src="img/detail.png"></div>
+        <div class="o-con-img" style="height: auto;"><img src="img/detail.png"></div>
         <div class="o-con-txt">
             <p>卤香滑鸡</p>
             <p class="price">￥88</p>
@@ -62,7 +81,7 @@
 </div>
 <div class="c-comment-list" style="border: 0;">
     <a class="o-con" href="">
-        <div class="o-con-img"><img src="img/detail.png"></div>
+        <div class="o-con-img" style="height: auto;"><img src="img/detail.png"></div>
         <div class="o-con-txt">
             <p>卤香滑鸡</p>
             <p class="price">￥88</p>

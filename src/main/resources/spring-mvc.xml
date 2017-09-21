@@ -58,8 +58,8 @@
             <bean class="com.scx.subscription.interceptor.LoginInterceptor">
                 <property name="excludeUrls">
                     <list>
-                        <value>login/index.do</value>
-                        <value>login/prompt.do</value>
+                        <value>user/login.do</value>
+                        <value>user/prompt.do</value>
                     </list>
                 </property>
             </bean>

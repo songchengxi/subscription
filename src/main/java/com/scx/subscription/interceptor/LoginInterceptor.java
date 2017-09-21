@@ -23,7 +23,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
         if (request.getSession().getAttribute("user") == null) {
-            request.getRequestDispatcher("/login/prompt.do").forward(request, response);
+            request.getRequestDispatcher("/user/prompt.do").forward(request, response);
             return false;
         }
         return true;

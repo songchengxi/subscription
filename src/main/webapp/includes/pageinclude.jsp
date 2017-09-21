@@ -10,7 +10,7 @@
     String serverName = request.getServerName();
     //端口号
     int serverPort = request.getServerPort();
-    //项目名(/sxm-crm-esop-pro)
+    //项目名(/subscription)
     String contextPath = request.getContextPath();
     //服务器路径
     String serverPath = scheme + "://" + serverName + ":" + serverPort + "/";

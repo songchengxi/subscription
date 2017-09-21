@@ -3,6 +3,8 @@ package com.scx.subscription.core;
 import com.scx.subscription.message.resp.NewsMessage;
 import com.scx.subscription.message.resp.TextMessage;
 import com.scx.subscription.message.resp.entity.Article;
+import com.scx.subscription.model.WXUser;
+import com.scx.subscription.repository.WXUserRepository;
 import com.scx.subscription.service.UserService;
 import com.scx.subscription.tools.express.ExpressService;
 import com.scx.subscription.tools.face.FaceService;
@@ -11,6 +13,7 @@ import com.scx.subscription.tools.translate.service.TranslateService;
 import com.scx.subscription.tools.tuling.TulingService;
 import com.scx.subscription.tools.weather.Weather;
 import com.scx.util.DanXianSheng;
+import com.scx.util.DryClean;
 import com.scx.util.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +36,8 @@ public class DryCleanService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private WXUserRepository wxUserRepository;
 
     /**
      * 处理微信发来都请求
@@ -82,7 +87,8 @@ public class DryCleanService {
             if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
                 // 回复？返回帮助菜单
                 if (content.equals("?") || content.equals("？")) {
-                    respContent = DanXianSheng.getMainMenu();
+                    WXUser user = wxUserRepository.findOne(fromUserName);
+                    respContent = DryClean.getMainMenu(user);
                     textMessage.setContent(respContent);
                     respMessage = MessageUtil.textMessageToXml(textMessage);
                     // 回复图文消息（单图文消息）
@@ -242,10 +248,10 @@ public class DryCleanService {
 
                 // 订阅
                 if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
-                    respContent = DanXianSheng.getMainMenu();
+                    WXUser wxUser = userService.saveUserInfo(fromUserName, eventKey);
+                    respContent = DryClean.getMainMenu(wxUser);
                     textMessage.setContent(respContent);
                     respMessage = MessageUtil.textMessageToXml(textMessage);
-                    userService.saveUserInfo(fromUserName, eventKey);
                     // 取消订阅（用户取消订阅收不到公众号发送的消息，不需要回复）
                 } else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
                     userService.updateUserInfo(fromUserName);
