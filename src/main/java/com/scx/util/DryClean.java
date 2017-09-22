@@ -18,7 +18,7 @@ public class DryClean {
         sb.append("6 翻译").append("\n");
         sb.append("7 人脸识别").append("\n");
         sb.append("回复\"?\"显示此帮助菜单").append("\n");
-        sb.append("<a href=\"http://songcx.duapp.com/subscription/page/dry-clean/index.html?openId=").append(u.getOpenid()).append("\">积分兑换商城</a>");
+        sb.append("<a href=\"http://songcx.duapp.com/subscription/page/dry-clean/index.jsp?openId=").append(u.getOpenid()).append("\">积分兑换商城</a>");
         return sb.toString();
     }
 }

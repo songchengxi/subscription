@@ -27,8 +27,11 @@
 
                     //初始化载入数据
                     $http({
-                        url: '${basePath}/goods/findById.do?id=' + $scope.data.id,
-                        method: 'POST'
+                        url: '${basePath}/goods/findById.do',
+                        method: 'POST',
+                        data: {
+                            id: $scope.data.id
+                        }
                     }).then(function (res) {
                         $scope.data = res.data.goods;
                     });

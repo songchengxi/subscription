@@ -33,7 +33,7 @@
                             data: $scope.data
                         }).then(function (r) {
                             if (r.data.state == "OK") {
-                                window.location.href = "${basePath}/page/dry-clean/index.jsp?openId=ound1xLAlhqnsO1l1qtuAu9x4bH4";
+                                window.location.href = "${basePath}/page/dry-clean/manage.jsp";
                             } else {
                                 $scope.data.msg = "账号或密码错误";
                             }

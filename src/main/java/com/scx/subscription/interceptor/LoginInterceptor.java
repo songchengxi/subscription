@@ -22,10 +22,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (excludeUrls.contains(requestPath)) {
             return true;
         }
-        if (request.getSession().getAttribute("user") == null) {
-            request.getRequestDispatcher("/user/prompt.do").forward(request, response);
-            return false;
-        }
+//        if (request.getSession().getAttribute("user") == null) {
+//            request.getRequestDispatcher("/user/prompt.do").forward(request, response);
+//            return false;
+//        }
         return true;
     }
 

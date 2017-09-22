@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -19,6 +20,15 @@ public class WXUserController {
 
     @Autowired
     private WXUserRepository wxUserRepository;
+
+    @PostMapping("/findAll")
+    @ResponseBody
+    public Map<String, Object> findAll() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<WXUser> users = wxUserRepository.findAll();
+        map.put("users", users);
+        return map;
+    }
 
     @PostMapping("/findById")
     @ResponseBody

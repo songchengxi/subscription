@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="css/wap.css">
     <script src="js/jquery.min.js"></script>
     <script src="js/amazeui.min.js"></script>
-    <title>更多商品</title>
+    <title>泰洁干洗</title>
     <script type="text/javascript">
         /*<![CDATA[*/
         var app = angular.module('app', []);

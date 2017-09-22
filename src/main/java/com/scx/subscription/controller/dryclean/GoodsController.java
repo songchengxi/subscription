@@ -22,6 +22,15 @@ public class GoodsController {
     @Autowired
     private GoodsRepository goodsRepository;
 
+    @PostMapping("/findAll")
+    @ResponseBody
+    public Map<String, Object> findAll() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<Goods> all = goodsRepository.findAll();
+        map.put("goods", all);
+        return map;
+    }
+
     /**
      * 查找有效商品
      */
@@ -36,10 +45,28 @@ public class GoodsController {
 
     @PostMapping("/findById")
     @ResponseBody
-    public Map<String, Object> findById(String id) {
+    public Map<String, Object> findById(@RequestBody Goods goods) {
         Map<String, Object> map = new HashMap<String, Object>();
-        Goods one = goodsRepository.findOne(id);
-        map.put("goods", one);
+        goods = goodsRepository.findOne(goods.getId());
+        map.put("goods", goods);
+        return map;
+    }
+
+    @PostMapping("/save")
+    @ResponseBody
+    public Map<String, Object> save(@RequestBody Goods goods) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Goods save = goodsRepository.save(goods);
+        map.put("goods", goods);
+        return map;
+    }
+
+    @PostMapping("/del")
+    @ResponseBody
+    public Map<String, Object> del(@RequestBody Goods goods) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        goodsRepository.delete(goods);
+        map.put("id", goods.getId());
         return map;
     }
 }
